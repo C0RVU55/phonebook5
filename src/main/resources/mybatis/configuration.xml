@@ -7,7 +7,6 @@
     </typeAliases>
 
     <mappers>
-        <mapper resource="mybatis/mappers/phonebook.xml" />
-        <mapper resource="mybatis/mappers/guestbook.xml" />
+        <mapper resource="mybatis/mappers/phonebook.xml" /> <!-- 여기 게스트북 있었는데 게스트북 못찾는다고 오류뜸. 쓰는 것만 넣기.-->
     </mappers>
 </configuration>

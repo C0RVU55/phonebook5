@@ -31,7 +31,7 @@
 			<tr>
 				<td><a href="${pageContext.request.contextPath}/phone/modifyForm?personId=${vo.personId }">수정</a></td>
 				<%--톰캣이랑 연결되는 주소 '/프로젝트명'을 변수로 불러와주는 el. 일일이 숫자 안 바꿔도 됨.  --%>
-				<td><a href="${pageContext.request.contextPath}/phone/delete/${vo.personId }">삭제</a></td> <%--PathVariable 쓸 때 --%>
+				<td><a href="${pageContext.request.contextPath}/phone/delete?personId=${vo.personId }">삭제</a></td> <%--PathVariable 쓸 때 --%>
 			</tr>
 		</table>
 		<br>

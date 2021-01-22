@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,8 +17,12 @@ import com.javaex.vo.PhoneVo;
 @RequestMapping(value="/phone")
 public class PhoneController {
 	
-	//mybatis패키지 아이콘 폴더 아닌 거로 바꾸기 --> 프로젝트명 > properties > java build path > resources
+	//mybatis패키지 아이콘 폴더 아닌 거로 바꾸기 > 프로젝트명 > properties > java build path > resources
 	// > mybatis 있는 패키지 > exclude(**) 더블클릭해서 삭제하고 적용하면 됨.
+	
+	//***오류 찾기
+	//1.오류나면 맨위의 맨끝에 있는 문구 보고 오류 찾아보기
+	//2.코드 바뀌면 수시로 ctrl+shift+O로 import 정리하기
 	
 	//필드 
 	@Autowired
@@ -51,7 +54,7 @@ public class PhoneController {
 		return "writeForm";
 	}
 	
-	//등록 (각 파라미터 꺼내기)
+	//등록
 	@RequestMapping(value="/write", method= {RequestMethod.GET, RequestMethod.POST})
 	public String write(@RequestParam("name") String name, @RequestParam("hp") String hp, @RequestParam("company") String company) { 
 		System.out.println("write");
@@ -65,16 +68,17 @@ public class PhoneController {
 	}
 	
 	//삭제 delete --> @RequestMapping 약식
-	@RequestMapping(value="/delete2", method= {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(value="/delete", method= {RequestMethod.GET, RequestMethod.POST})
 	public String delete2(@RequestParam("personId") int id) {
-		System.out.println("delete2");
+		System.out.println("delete");
 		
 		phoneDao.phoneDelete(id);
 		
 		return "redirect:/phone/list";
 	}
 	
-	//삭제 delete --> @PathVariable
+	/*
+	//삭제 delete --> @PathVariable (이것도 테스트 완료)
 	@RequestMapping(value="/delete/{personId}", method= {RequestMethod.GET, RequestMethod.POST})
 	public String delete(@PathVariable("personId") int id) {
 		System.out.println("delete");
@@ -83,11 +87,14 @@ public class PhoneController {
 		
 		return "redirect:/phone/list";
 	}
+	*/
 	
 	//수정폼 modifyForm
 	@RequestMapping(value="/modifyForm", method= {RequestMethod.GET, RequestMethod.POST})
 	public String modifyForm(@RequestParam("personId") int id, Model model) { 
+		//먼저 데이터 들어오나 확인
 		System.out.println("modifyForm");
+		System.out.println(id);
 		
 		PhoneVo pVo = phoneDao.getPerson(id);
 		
@@ -95,31 +102,10 @@ public class PhoneController {
 		
 		return "modifyForm";
 		
-		/* 해설
-		먼저 html 가져오고 
-		html + 정보 --> DB 접근
-		*/
 		
 	}
 	
-	/*
-	//수정 modify
-	@RequestMapping(value="/modify", method= {RequestMethod.GET, RequestMethod.POST})
-	public String modify(@RequestParam("id") int id, 
-				@RequestParam("name") String name, 
-				@RequestParam("hp") String hp, 
-				@RequestParam("company") String company) {
-		System.out.println("modify");
-		
-		PhoneVo pVo = new PhoneVo(id, name, hp, company);
-		PhoneDao pDao = new PhoneDao();
-		pDao.phoneUpdate(pVo);
-		
-		return "redirect:/phone/list";
-	}
-	*/
-	
-	//수정 modify --> 자동으로 파라미터 다 받아서 vo에 넣게 하기 --> @ModelAttribute(이거 생략하고 PHoneVo pVo만 써도 됨)
+	//수정 modify --> 자동으로 파라미터 다 받아서 vo에 넣게 하기 --> @ModelAttribute(이거 생략하고 PhoneVo pVo만 써도 됨)
 	@RequestMapping(value="/modify", method= {RequestMethod.GET, RequestMethod.POST})
 	public String modify(@ModelAttribute PhoneVo pVo) {
 		System.out.println("modify");
