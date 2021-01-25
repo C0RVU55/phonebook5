@@ -1,6 +1,8 @@
 package com.javaex.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +61,24 @@ public class PhoneDao {
 		return pVo;
 	}
 	
+	//1명 정보 가져오기2 HashMap
+	public Map<String, Object> getPerson2(int id) {
+		System.out.println("[dao]getPerson() : "+id);
+		
+		Map<String, Object> personMap = sqlSession.selectOne("phonebook.selectOne2", id);
+		System.out.println(personMap.toString());
+		
+		//꺼내쓸 때 get("키")인데 자동으로 컬럼명(대문자)을 키값으로 넣음.
+		//object로 나와서 형변환해야 됨.
+		String name = (String)personMap.get("NAME"); 
+		System.out.println(name);
+		//근데 int는 형변환 안 되고 오류남. 오라클 컬럼 타입이 number면 int로 형변환시 오류나는 거. --> String으로 바꾸고 나서 int로 바꿈.
+		int personId = Integer.parseInt((String.valueOf(personMap.get("PERSONID"))));
+		System.out.println(personId);
+			
+		return personMap;
+	}
+	
 	//수정
 	public int phoneUpdate(PhoneVo pVo) {
 		System.out.println("[dao]update : "+pVo);
@@ -67,6 +87,21 @@ public class PhoneDao {
 		
 		System.out.println("[dao]수정 "+count+"건 완료");
 		return count;
+	}
+	
+	//수정2 --> 만약에 vo가 이때 1번밖에 안 쓰여서 vo를 더 늘리고 싶지 않을 때 vo대신 map 사용 가능
+	public void phoneUpdate2(int personId, String name, String hp, String company) {
+		System.out.println("[dao]update : "+personId+" "+name+" "+hp+" "+company);
+		
+		Map<String, Object> personMap = new HashMap<String, Object>();
+		personMap.put("id", personId); //("키", 값) 형태
+		personMap.put("name", name);
+		personMap.put("hp", hp);
+		personMap.put("company", company);
+		
+		System.out.println(personMap.toString());
+		
+		sqlSession.update("update2", personMap);
 	}
 
 

@@ -4,6 +4,7 @@
 
 <configuration>
     <typeAliases>
+    	<typeAlias alias="PhoneVo" type="com.javaex.vo.PhoneVo" /> <!-- phonebook.xml 쿼리문에서 주소 대신 alias로 대체 가능 -->
     </typeAliases>
 
     <mappers>

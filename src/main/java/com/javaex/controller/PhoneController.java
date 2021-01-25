@@ -1,6 +1,7 @@
 package com.javaex.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -100,9 +101,21 @@ public class PhoneController {
 		
 		model.addAttribute("pVo", pVo);
 		
-		return "modifyForm";
+		return "modifyForm";		
+	}
+	
+	//수정폼 modifyForm2 --> HashMap 사용. mybatis에서 map으로 넘긴 거 vo로 받음.
+	//계속 쓸 거 같으면 vo 만들고 1번만 쓸 거면 map으로 쓸 수 있음.
+	@RequestMapping(value="/modifyForm2", method= {RequestMethod.GET, RequestMethod.POST})
+	public String modifyForm2(@RequestParam("personId") int id, Model model) { 
+		System.out.println("modifyForm2");
+		System.out.println(id);
 		
+		//Map<키(의 자료형), 값(데이터의 자료형)>
+		Map<String, Object> personMap = phoneDao.getPerson2(id);
+		model.addAttribute("pMap", personMap);
 		
+		return "modifyForm2";
 	}
 	
 	//수정 modify --> 자동으로 파라미터 다 받아서 vo에 넣게 하기 --> @ModelAttribute(이거 생략하고 PhoneVo pVo만 써도 됨)
@@ -111,6 +124,19 @@ public class PhoneController {
 		System.out.println("modify");
 		
 		phoneDao.phoneUpdate(pVo);
+		
+		return "redirect:/phone/list";
+	}
+	
+	//수정 modify 2 --> Map 사용(테스트O)
+	@RequestMapping(value="/modify2", method= {RequestMethod.GET, RequestMethod.POST})
+	public String modify2(@RequestParam("personId") int id,
+						@RequestParam("name") String name,
+						@RequestParam("hp") String hp,
+						@RequestParam("company") String company) {
+		System.out.println("modify2");
+		
+		phoneDao.phoneUpdate2(id, name, hp, company);
 		
 		return "redirect:/phone/list";
 	}
